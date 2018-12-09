@@ -3,6 +3,7 @@ import nodeExternals from 'webpack-node-externals'
 import webpack from 'webpack'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 
 
@@ -39,6 +40,10 @@ export default {
         new CleanWebpackPlugin(['dist']),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
-        })
+        }),
+        new CopyWebpackPlugin([{
+            from: 'src/templates/', 
+            to: './templates', 
+            toType: 'dir'}])
     ]
 }
