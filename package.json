@@ -1,11 +1,6 @@
 {
     "name": "mailer_api",
-    "version": "1.0.0",
-    "babel": {
-        "presets": [
-            "@babel/preset-env"
-        ]
-    },
+    "version": "1.0.0",   
     "description": "mailer microservice",
     "author": "Vit Srajbr <me@iamwtk.com>",
     "main": "server.js",
