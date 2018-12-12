@@ -1,6 +1,6 @@
 import { expect }           from 'chai'
 import mock                 from 'mock-fs'
-import { populateTemplate } from './mailer'
+import { populateTemplate, buildMessageObject } from './mailer'
 
 describe('Mailer', () => {
 
@@ -56,5 +56,38 @@ describe('Mailer', () => {
 
         })
 
+    })
+    describe('buildMessageObject()', () => {
+        let testObject, htmlMessage
+        beforeEach(() => {
+            testObject = {
+                from: 'test name <email@test.com>',
+                to: 'server@email.com',
+                subject: 'New message from test name',
+                html: '<p>blah</p>'
+            }
+            htmlMessage = '<p>blah</p>'
+        }) 
+        it('Should set `from` user email and `to` server email if `transactional` is false', () => {            
+            const data = {
+                name: 'test name',
+                email: 'email@test.com'
+            }
+            const messageObject = buildMessageObject({ data }, htmlMessage, 'server@email.com')
+
+            expect(messageObject).to.eql(testObject) 
+        })
+        it('Should set `from` server email and `to` user email if `transactional` is true', () => {
+            const data = {
+                name: 'test name',
+                email: 'email@test.com'
+            }
+            testObject.from = 'server@email.com'
+            testObject.to = 'email@test.com'           
+
+            const messageObject = buildMessageObject({ transactional: true, data }, htmlMessage, 'server@email.com')
+
+            expect(messageObject).to.eql(testObject) 
+        })       
     })
 })

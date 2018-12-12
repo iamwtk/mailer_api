@@ -38,16 +38,16 @@ export const populateTemplate = async ({ language = null, template = 'contact', 
         
 }
 
-export const buildMessageObject = ({transactional = false, data }, htmlMessage) =>({
+export const buildMessageObject = ({transactional = false, data }, htmlMessage, serverEmail = constants.server_email) =>({
 
     from:   transactional ? 
-            constants.server_email : 
+            serverEmail : 
             `${data.name} <${data.email}>`,
             
 
     to:     transactional ? 
             data.email : 
-            constants.server_email,
+            serverEmail,
 
 
     //TODO: switch localized subject to i18n
