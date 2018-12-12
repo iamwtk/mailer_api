@@ -24,37 +24,37 @@ export default async (req, res) => {
 
 }
 
-const populateTemplate = async ({ language = null, template = 'contact', data, service }) => {  
+export const populateTemplate = async ({ language = null, template = 'contact', data = {}, service, multilingual = constants.multilingual }) => {  
 
-    const templatePath = path.join(__dirname,
+    const templatePath = path.join(
         `templates`,
         service ? service : '',
-        constants.multilingual ? (language ? language : 'en_US') : '',
+        multilingual ? (language ? language : 'en_US') : '',
         `${template}.ejs`
     )
     
     //return populated ejs template with request data
-    return await ejs.renderFile(templatePath, { data })       
+    return await ejs.renderFile(templatePath, { ...data })       
         
 }
 
-const buildMessageObject = ({transactional = false, data }, htmlMessage) => {
-    return {
-        from:   transactional ? 
-                constants.server_email : 
-                `${data.name} <${data.email}>`,
-                
+export const buildMessageObject = ({transactional = false, data }, htmlMessage) =>({
 
-        to:     transactional ? 
-                data.email : 
-                constants.server_email,
+    from:   transactional ? 
+            constants.server_email : 
+            `${data.name} <${data.email}>`,
+            
 
-
-        //TODO: switch localized subject to i18n
-        subject: `New message from ${data.name}`,
+    to:     transactional ? 
+            data.email : 
+            constants.server_email,
 
 
-        html: htmlMessage
-     }
-}
+    //TODO: switch localized subject to i18n
+    subject: `New message from ${data.name}`,
+
+
+    html: htmlMessage
+
+})
 
