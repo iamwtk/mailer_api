@@ -26,8 +26,8 @@ export default async (req, res) => {
 
 export const populateTemplate = async ({ language = null, template = 'contact', data = {}, service }) => {  
 
-    const templatePath = path.join(
-        `templates`,
+    const templatePath = path.join(__dirname,
+        `/templates`,
         service ? service : '',
         constants.multilingual ? (language ? language : 'en_US') : '',
         `${template}.ejs`

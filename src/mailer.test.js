@@ -3,6 +3,8 @@ import mock                 from 'mock-fs'
 import { populateTemplate, buildMessageObject } from './mailer'
 import { mailer as constants } from './config/constants'
 
+import path from 'path'
+
 describe('Mailer', () => {
 
     describe('populateTemplate()', () => {
@@ -11,7 +13,7 @@ describe('Mailer', () => {
 
         it('should return populated string', async () => {
 
-            mock({ 'templates/test.ejs': '<p><%= variable %></p>' })
+            mock({ 'src/templates/test.ejs': '<p><%= variable %></p>' })
          
             const result = await populateTemplate({template: 'test',  data : { variable: 'blah' }})
             
@@ -21,7 +23,7 @@ describe('Mailer', () => {
 
         it('should build path with service subfolder if `service` is defined', async () => {
 
-            mock({ 'templates/someservice/test.ejs': '<p><%= variable %></p>' })
+            mock({ 'src/templates/someservice/test.ejs': '<p><%= variable %></p>' })
          
             const result = await populateTemplate({template: 'test', service: 'someservice',  data : { variable: 'blah' }})
             
@@ -33,7 +35,7 @@ describe('Mailer', () => {
           
             it('should build path with language subfolder if `multilingual` is true', async () => {
                 
-                mock({ 'templates/en_US/test.ejs': '<p><%= variable %></p>' })
+                mock({ 'src/templates/en_US/test.ejs': '<p><%= variable %></p>' })
 
                 constants.multilingual = true
             
@@ -45,7 +47,7 @@ describe('Mailer', () => {
 
              it('should build path with specified language if `language` is specified', async () => {
                 
-                mock({ 'templates/cs_CZ/test.ejs': '<p><%= variable %></p>' })
+                mock({ 'src/templates/cs_CZ/test.ejs': '<p><%= variable %></p>' })
             
                 const result = await populateTemplate({
                     template: 'test', 
