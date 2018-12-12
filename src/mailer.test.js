@@ -1,6 +1,7 @@
 import { expect }           from 'chai'
 import mock                 from 'mock-fs'
 import { populateTemplate, buildMessageObject } from './mailer'
+import { mailer as constants } from './config/constants'
 
 describe('Mailer', () => {
 
@@ -33,8 +34,10 @@ describe('Mailer', () => {
             it('should build path with language subfolder if `multilingual` is true', async () => {
                 
                 mock({ 'templates/en_US/test.ejs': '<p><%= variable %></p>' })
+
+                constants.multilingual = true
             
-                const result = await populateTemplate({template: 'test', data : { variable: 'blah' }, multilingual: true })
+                const result = await populateTemplate({template: 'test', data : { variable: 'blah' }})
                 
                 expect(result).to.equal('<p>blah</p>')
             
@@ -46,8 +49,7 @@ describe('Mailer', () => {
             
                 const result = await populateTemplate({
                     template: 'test', 
-                    data : { variable: 'blah' }, 
-                    multilingual: true,
+                    data : { variable: 'blah' },                     
                     language: 'cs_CZ'
                 })
                 
@@ -73,7 +75,10 @@ describe('Mailer', () => {
                 name: 'test name',
                 email: 'email@test.com'
             }
-            const messageObject = buildMessageObject({ data }, htmlMessage, 'server@email.com')
+
+            constants.server_email = 'server@email.com'
+
+            const messageObject = buildMessageObject({ data }, htmlMessage)
 
             expect(messageObject).to.eql(testObject) 
         })
@@ -85,7 +90,7 @@ describe('Mailer', () => {
             testObject.from = 'server@email.com'
             testObject.to = 'email@test.com'           
 
-            const messageObject = buildMessageObject({ transactional: true, data }, htmlMessage, 'server@email.com')
+            const messageObject = buildMessageObject({ transactional: true, data }, htmlMessage)
 
             expect(messageObject).to.eql(testObject) 
         })       

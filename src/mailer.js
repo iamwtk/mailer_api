@@ -24,12 +24,12 @@ export default async (req, res) => {
 
 }
 
-export const populateTemplate = async ({ language = null, template = 'contact', data = {}, service, multilingual = constants.multilingual }) => {  
+export const populateTemplate = async ({ language = null, template = 'contact', data = {}, service }) => {  
 
     const templatePath = path.join(
         `templates`,
         service ? service : '',
-        multilingual ? (language ? language : 'en_US') : '',
+        constants.multilingual ? (language ? language : 'en_US') : '',
         `${template}.ejs`
     )
     
@@ -38,16 +38,16 @@ export const populateTemplate = async ({ language = null, template = 'contact', 
         
 }
 
-export const buildMessageObject = ({transactional = false, data }, htmlMessage, serverEmail = constants.server_email) =>({
+export const buildMessageObject = ({transactional = false, data }, htmlMessage) =>({
 
     from:   transactional ? 
-            serverEmail : 
+            constants.server_email : 
             `${data.name} <${data.email}>`,
             
 
     to:     transactional ? 
             data.email : 
-            serverEmail,
+            constants.server_email,
 
 
     //TODO: switch localized subject to i18n
